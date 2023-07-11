@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stm32f4xx_can.h": "c"
+    },
+    "cmake.useCMakePresets": "auto",
+    "cortex-debug.gdbPath": "/usr/bin/arm-none-eabi-gdb",
+    "cortex-debug.armToolchainPrefix": "arm-none-eabi"
+}

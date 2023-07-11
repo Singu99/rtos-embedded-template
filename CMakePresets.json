@@ -1,0 +1,84 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "debug-h723vet6",
+            "displayName": "debug-h723vet6",
+            "description": "Configures cmake for debug build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32H723VET6"
+            }
+        },
+        {
+            "name": "release-h723",
+            "displayName": "release-h723vet6",
+            "description": "Configures cmake for release build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32H723VET6"
+            }
+        },
+        {
+            "name": "debug-f429",
+            "displayName": "debug-f429",
+            "description": "Configures cmake for debug build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32F429"
+            }
+        },
+        {
+            "name": "release-f429",
+            "displayName": "release-f429",
+            "description": "Configures cmake for release build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32F429"
+            }
+        },
+        {
+            "name": "debug-h723vgt6",
+            "displayName": "debug-h723vgt6",
+            "description": "Configures cmake for debug build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32H723VGT6"
+            }
+        },
+        {
+            "name": "release-h723vgt6",
+            "displayName": "release-h723vgt6",
+            "description": "Configures cmake for release build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "cmake/gcc-arm-none-eabi.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "MCU_TARGET": "STM32H723VGT6"
+            }
+        }
+
+    ]
+}
