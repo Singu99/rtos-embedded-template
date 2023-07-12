@@ -1,14 +1,18 @@
 #pragma once
 
 
-class Gpio {
+namespace pal {
 
-public:
-    Gpio();
-    ~Gpio();
+    class Gpio {
+        
+    public:
+        Gpio();
+        ~Gpio();
 
-private:
-    
+    private:
+        
 
 
-};
+    };
+
+}

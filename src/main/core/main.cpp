@@ -3,14 +3,12 @@
 
 // TODO: Move it to common header. Add precompiled headers
 // Remove useless cast warnings
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuseless-cast"
-#include <cmsis_os.h>
-#pragma GCC diagnostic pop
+#include "rtos.hpp"
 
 #include "memory/factory.hpp"
 
 #include "drivers/stm32/system.hpp"
+#include "drivers/pal/pal.hpp"
 
 #include "controllers/core_controller.hpp"
 #include "controllers/rx_controller.hpp"
@@ -20,7 +18,7 @@ RxController* rx;
 
 int main()
 {
-    HAL_Init();
+    pal::LayerInit();
 
     System::Init();
 

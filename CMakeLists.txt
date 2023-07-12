@@ -134,6 +134,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -Wextra
     -Wpedantic
     -Wno-unused-parameter
+    #-fopt-info-optimized
     $<$<COMPILE_LANGUAGE:CXX>:
         -Wno-volatile
         -Wno-old-style-cast
