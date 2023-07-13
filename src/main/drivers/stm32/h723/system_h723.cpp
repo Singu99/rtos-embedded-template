@@ -1,12 +1,9 @@
 #ifdef STM32H7xx
 
 #include "drivers/stm32/system.hpp"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuseless-cast"
-#include <stm32h7xx_hal.h>
-#pragma GCC diagnostic pop
+#include "drivers/platform.hpp"
 
-void System::Init()
+void system::init()
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {};

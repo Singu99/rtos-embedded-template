@@ -13,20 +13,20 @@
 #include "controllers/core_controller.hpp"
 #include "controllers/rx_controller.hpp"
 
-CoreController* core;
-RxController* rx;
+core_controller* core;
+rx_controller* rx;
 
 int main()
 {
-    pal::LayerInit();
+    pal::layer_init();
 
-    System::Init();
+    system::init();
 
     osKernelInitialize();
 
     // Controller initialization
-    core = Factory::create<CoreController>();
-    rx = Factory::create<RxController>();
+    core = factory::create<core_controller>();
+    rx = factory::create<rx_controller>();
 
     // TODO: Change to std::optional
     if (core == nullptr || rx == nullptr)   while (1);

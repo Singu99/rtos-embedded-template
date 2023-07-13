@@ -4,10 +4,10 @@
 #include "memory/pool_allocator.hpp"
 // #include "drivers/platform_abstraction_layer/gpio.h"
 
-class CoreController : public Runnable, public PoolAllocator<CoreController, 1> {
+class core_controller : public Runnable, public PoolAllocator<core_controller, 1> {
 public:
-    CoreController();
-    ~CoreController() = default;
+    core_controller();
+    ~core_controller() = default;
 
     // Running thread will execute this function
     virtual void Run() override;

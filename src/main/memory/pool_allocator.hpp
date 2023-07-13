@@ -1,18 +1,15 @@
 #pragma once
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuseless-cast"
-#include <cmsis_os.h>
-#pragma GCC diagnostic pop
+#include "rtos.hpp"
 
 #include <cstdint>
 
-class Factory;
+class factory;
 
 
 template<typename T, size_t MaxElements>
 class PoolAllocator {
-    friend class Factory;
+    friend class factory;
 private:
     /**
      * Allocate using CMSIS RTOS memory pool

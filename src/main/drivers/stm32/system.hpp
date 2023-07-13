@@ -2,10 +2,10 @@
 
 void Error_Handler();
 
-class System
+class system
 {
 public:
-    static void Init();
+    static void init();
 
 
 

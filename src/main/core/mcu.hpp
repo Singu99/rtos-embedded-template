@@ -6,8 +6,8 @@
 namespace mcu {
 
     // Controller
-    extern CoreController* core;
-    extern RxController* rx;
+    extern core_controller* core;
+    extern rx_controller* rx;
     
 
 }

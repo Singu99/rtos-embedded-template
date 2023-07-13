@@ -3,6 +3,6 @@
 
 namespace pal {
 
-    void LayerInit();
+    void layer_init();
 
 }

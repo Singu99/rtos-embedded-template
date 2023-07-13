@@ -3,11 +3,11 @@
 #include "runnable.hpp"
 #include "memory/pool_allocator.hpp"
 
-class RxController : public Runnable, public PoolAllocator<RxController, 1> {
+class rx_controller : public Runnable, public PoolAllocator<rx_controller, 1> {
 
 public:
-    RxController();
-    ~RxController() = default;
+    rx_controller();
+    ~rx_controller() = default;
 
     uint32_t getChannel(uint8_t channel) const { return 0; }
 

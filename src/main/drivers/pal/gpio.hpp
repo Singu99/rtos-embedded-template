@@ -3,16 +3,11 @@
 
 namespace pal {
 
-    class Gpio {
-        
+    class Gpio {  
     public:
-        Gpio();
-        ~Gpio();
 
     private:
-        
-
-
+    
     };
 
 }

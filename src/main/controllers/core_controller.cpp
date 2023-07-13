@@ -32,14 +32,14 @@ static void LED_GPIO_Init()
 }
 
 
-CoreController::CoreController()
+core_controller::core_controller()
     : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal))
 {
     LED_GPIO_Init();
 }
 
 // Running thread will execute this function
-void CoreController::Run()
+void core_controller::Run()
 {
     // Init GPIOD PIN 2 using HAL library
 
@@ -61,7 +61,7 @@ void CoreController::Run()
     
 }
 
-void CoreController::Init()
+void core_controller::Init()
 {
 
 

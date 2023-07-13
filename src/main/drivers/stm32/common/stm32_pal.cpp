@@ -4,7 +4,7 @@
 
 namespace pal {
 
-    void LayerInit()
+    void layer_init()
     {
         #ifdef USE_HAL_DRIVER
         HAL_Init();

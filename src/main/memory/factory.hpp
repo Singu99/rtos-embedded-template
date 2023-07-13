@@ -10,7 +10,7 @@
  * @brief      A factory class that creates and destroys objects of type T. It is intended to be used with Allocators that will be passed as T on the tamplate parameter.
  * An allocator class should have allocate and deallocate static methods. Have protected constructors and destructors. 
 */
-class Factory {
+class factory {
 public:
     template <typename T, typename... Args>
     static T* create(Args&&... args) {
@@ -30,6 +30,6 @@ public:
         }
     }
 private:
-    Factory() = delete;
-    ~Factory() = delete;
+    factory() = delete;
+    ~factory() = delete;
 };

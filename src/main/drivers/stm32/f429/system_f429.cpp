@@ -4,7 +4,7 @@
 #include "stm32f4xx_hal.h"
 
 
-void System::Init()
+void system::init()
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {};
