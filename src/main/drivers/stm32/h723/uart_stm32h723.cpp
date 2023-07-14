@@ -4,6 +4,7 @@
 #include "drivers/rcc.h"
 #include "drivers/common/hardware.hpp"
 #include "drivers/stm32/common/stm32_uart_impl.hpp"
+#include "drivers/pal/gpio.hpp"
 
 #define USE_UART1
 #define USE_UART2
@@ -92,14 +93,14 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART1_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOA, GPIO_PIN_10, GPIO_AF7_USART1 },
-            { GPIOB, GPIO_PIN_7,  GPIO_AF7_USART1 },
-            { GPIOB, GPIO_PIN_15, GPIO_AF4_USART1 },
+            { {pal::port::a, pal::pin::p10}, GPIOA, GPIO_PIN_10, GPIO_AF7_USART1 },
+            { {pal::port::b, pal::pin::p7},  GPIOB, GPIO_PIN_7,  GPIO_AF7_USART1 },
+            { {pal::port::b, pal::pin::p15}, GPIOB, GPIO_PIN_15, GPIO_AF4_USART1 },
         },
         .txPins = {
-            { GPIOA, GPIO_PIN_9,  GPIO_AF7_USART1 },
-            { GPIOB, GPIO_PIN_6, GPIO_AF7_USART1 },
-            { GPIOB, GPIO_PIN_14, GPIO_AF4_USART1 },
+            { {pal::port::a, pal::pin::p9},  GPIOA, GPIO_PIN_9,  GPIO_AF7_USART1 },
+            { {pal::port::b, pal::pin::p6},  GPIOB, GPIO_PIN_6, GPIO_AF7_USART1 },
+            { {pal::port::b, pal::pin::p14}, GPIOB, GPIO_PIN_14, GPIO_AF4_USART1 },
         },
         .rcc = RCC_APB2(USART1),
         .rxIrq = USART1_IRQn
@@ -117,12 +118,12 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART2_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOA, GPIO_PIN_3, GPIO_AF7_USART2 },
-            { GPIOD, GPIO_PIN_6, GPIO_AF7_USART2 }
+            {{pal::port::a, pal::pin::p3},  GPIOA, GPIO_PIN_3,  GPIO_AF7_USART2 },
+            {{pal::port::d, pal::pin::p6},  GPIOD, GPIO_PIN_6,  GPIO_AF7_USART2 }
         },
         .txPins = {
-            { GPIOA, GPIO_PIN_2, GPIO_AF7_USART2 },
-            { GPIOD, GPIO_PIN_5, GPIO_AF7_USART2 }
+            {{pal::port::a, pal::pin::p2},  GPIOA, GPIO_PIN_2,  GPIO_AF7_USART2 },
+            {{pal::port::d, pal::pin::p5},  GPIOD, GPIO_PIN_5,  GPIO_AF7_USART2 },
         },
         .rcc = RCC_APB1L(USART2),
         .rxIrq = USART2_IRQn
@@ -140,14 +141,14 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART3_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOB, GPIO_PIN_11, GPIO_AF7_USART3 },
-            { GPIOC, GPIO_PIN_11, GPIO_AF7_USART3 },
-            { GPIOD, GPIO_PIN_9, GPIO_AF7_USART3 }
+            {{pal::port::b, pal::pin::p11}, GPIOB, GPIO_PIN_11, GPIO_AF7_USART3 },
+            {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF7_USART3 },
+            {{pal::port::d, pal::pin::p9},  GPIOD, GPIO_PIN_9,  GPIO_AF7_USART3 }
         },
         .txPins = {
-            { GPIOB, GPIO_PIN_10, GPIO_AF7_USART3 },
-            { GPIOC, GPIO_PIN_10, GPIO_AF7_USART3 },
-            { GPIOD, GPIO_PIN_8, GPIO_AF7_USART3 }
+            {{pal::port::b, pal::pin::p10}, GPIOB, GPIO_PIN_10, GPIO_AF7_USART3 },
+            {{pal::port::c, pal::pin::p10}, GPIOC, GPIO_PIN_10, GPIO_AF7_USART3 },
+            {{pal::port::d, pal::pin::p8},  GPIOD, GPIO_PIN_8,  GPIO_AF7_USART3 }
         },
         .rcc = RCC_APB1L(USART3),
         .rxIrq = USART3_IRQn
@@ -165,18 +166,18 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART4_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOA, GPIO_PIN_1,  GPIO_AF8_UART4 },
-            { GPIOA, GPIO_PIN_10, GPIO_AF6_UART4 },
-            { GPIOB, GPIO_PIN_8, GPIO_AF8_UART4 },
-            { GPIOC, GPIO_PIN_11, GPIO_AF8_UART4 },
-            { GPIOD, GPIO_PIN_0,  GPIO_AF8_UART4 }
+            {{pal::port::a, pal::pin::p1},  GPIOA, GPIO_PIN_1,  GPIO_AF8_UART4 },
+            {{pal::port::a, pal::pin::p10}, GPIOA, GPIO_PIN_10, GPIO_AF6_UART4 },
+            {{pal::port::b, pal::pin::p8},  GPIOB, GPIO_PIN_8, GPIO_AF8_UART4 },
+            {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF8_UART4 },
+            {{pal::port::d, pal::pin::p0},  GPIOD, GPIO_PIN_0,  GPIO_AF8_UART4 }
         },
         .txPins = {
-            { GPIOA, GPIO_PIN_0,  GPIO_AF8_UART4 },
-            { GPIOA, GPIO_PIN_12, GPIO_AF6_UART4 },
-            { GPIOB, GPIO_PIN_9, GPIO_AF8_UART4 },
-            { GPIOC, GPIO_PIN_10, GPIO_AF8_UART4 },
-            { GPIOD, GPIO_PIN_1,  GPIO_AF8_UART4 }
+            {{pal::port::a, pal::pin::p0},  GPIOA, GPIO_PIN_0,  GPIO_AF8_UART4 },
+            {{pal::port::a, pal::pin::p12}, GPIOA, GPIO_PIN_12, GPIO_AF6_UART4 },
+            {{pal::port::b, pal::pin::p9}, GPIOB, GPIO_PIN_9, GPIO_AF8_UART4 },
+            {{pal::port::c, pal::pin::p10}, GPIOC, GPIO_PIN_10, GPIO_AF8_UART4 },
+            {{pal::port::d, pal::pin::p1},  GPIOD, GPIO_PIN_1,  GPIO_AF8_UART4 }
         },
         .rcc = RCC_APB1L(UART4),
         .rxIrq = UART4_IRQn
@@ -194,14 +195,14 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART5_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOB, GPIO_PIN_6,  GPIO_AF14_UART5 },
-            { GPIOB, GPIO_PIN_13, GPIO_AF14_UART5 },
-            { GPIOC, GPIO_PIN_12, GPIO_AF8_UART5 },
+            {{pal::port::b, pal::pin::p6}, GPIOB, GPIO_PIN_6,  GPIO_AF14_UART5 },
+            {{pal::port::b, pal::pin::p13}, GPIOB, GPIO_PIN_13, GPIO_AF14_UART5 },
+            {{pal::port::c, pal::pin::p12}, GPIOC, GPIO_PIN_12, GPIO_AF8_UART5 }
         },
         .txPins = {
-            { GPIOB, GPIO_PIN_5,  GPIO_AF14_UART5 },
-            { GPIOB, GPIO_PIN_12, GPIO_AF14_UART5 },
-            { GPIOC, GPIO_PIN_11, GPIO_AF8_UART5 },
+            {{pal::port::b, pal::pin::p5},  GPIOB, GPIO_PIN_5,  GPIO_AF14_UART5 },
+            {{pal::port::b, pal::pin::p12}, GPIOB, GPIO_PIN_12, GPIO_AF14_UART5 },
+            {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF8_UART5 }
         },
         .rcc = RCC_APB1L(UART5),
         .rxIrq = UART5_IRQn
@@ -219,12 +220,12 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART6_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOC, GPIO_PIN_7, GPIO_AF7_USART6 },
-            { GPIOG, GPIO_PIN_9, GPIO_AF7_USART6 },
+            { {pal::port::c, pal::pin::p7}, GPIOC, GPIO_PIN_7, GPIO_AF7_USART6 },
+            { {pal::port::g, pal::pin::p9}, GPIOG, GPIO_PIN_9, GPIO_AF7_USART6 },
         },
         .txPins = {
-            { GPIOC, GPIO_PIN_6, GPIO_AF7_USART6 },
-            { GPIOG, GPIO_PIN_14, GPIO_AF7_USART6 },
+            {{pal::port::c, pal::pin::p6}, GPIOC, GPIO_PIN_6, GPIO_AF7_USART6 },
+            {{pal::port::g, pal::pin::p14}, GPIOG, GPIO_PIN_14, GPIO_AF7_USART6 }
         },
         .rcc = RCC_APB2(USART6),
         .rxIrq = USART6_IRQn
@@ -242,16 +243,16 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART7_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            { GPIOA, GPIO_PIN_8, GPIO_AF11_UART7 },
-            { GPIOB, GPIO_PIN_3, GPIO_AF11_UART7 },
-            { GPIOE, GPIO_PIN_7, GPIO_AF7_UART7 },
-            { GPIOF, GPIO_PIN_6, GPIO_AF7_UART7 }
+            {{pal::port::a, pal::pin::p8}, GPIOA, GPIO_PIN_8, GPIO_AF11_UART7 },
+            {{pal::port::b, pal::pin::p3}, GPIOB, GPIO_PIN_3, GPIO_AF11_UART7 },
+            {{pal::port::e, pal::pin::p7}, GPIOE, GPIO_PIN_7, GPIO_AF7_UART7 },
+            {{pal::port::f, pal::pin::p6}, GPIOF, GPIO_PIN_6, GPIO_AF7_UART7}
         },
         .txPins = {
-            { GPIOA, GPIO_PIN_15, GPIO_AF11_UART7 },
-            { GPIOB, GPIO_PIN_4,  GPIO_AF11_UART7 },
-            { GPIOE, GPIO_PIN_8,  GPIO_AF7_UART7 },
-            { GPIOF, GPIO_PIN_7,  GPIO_AF7_UART7 }
+            {{pal::port::a, pal::pin::p15}, GPIOA, GPIO_PIN_15, GPIO_AF11_UART7 },
+            {{pal::port::b, pal::pin::p4},  GPIOB, GPIO_PIN_4,  GPIO_AF11_UART7 },
+            {{pal::port::e, pal::pin::p8},  GPIOE, GPIO_PIN_8,  GPIO_AF7_UART7 },
+            {{pal::port::f, pal::pin::p7},  GPIOF, GPIO_PIN_7,  GPIO_AF7_UART7 }
         },
         .rcc = RCC_APB1L(UART7),
         .rxIrq = UART7_IRQn
@@ -269,10 +270,10 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART8_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            {GPIOE, GPIO_PIN_0, GPIO_AF8_UART8 }
+            {{pal::port::e, pal::pin::p0}, GPIOE, GPIO_PIN_0, GPIO_AF8_UART8 },
         },
         .txPins = {
-            {GPIOE, GPIO_PIN_1, GPIO_AF8_UART8}
+            {{pal::port::e, pal::pin::p1}, GPIOE, GPIO_PIN_1, GPIO_AF8_UART8 }
         },
         .rcc = RCC_APB1L(UART8),
         .rxIrq = UART8_IRQn
@@ -290,10 +291,10 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .txDMAResource = (dmaResource_t *)UART9_TX_DMA_STREAM,
 #endif
         .rxPins = {
-            {GPIOD, GPIO_PIN_14, GPIO_AF11_UART9}
+            {{pal::port::d, pal::pin::p14}, GPIOD, GPIO_PIN_14, GPIO_AF11_UART9 }
         },
         .txPins = {
-            {GPIOD, GPIO_PIN_15, GPIO_AF11_UART9}
+            {{pal::port::d, pal::pin::p15}, GPIOD, GPIO_PIN_15, GPIO_AF11_UART9 }
         },
         .rcc = RCC_APB2(UART9),
         .rxIrq = UART9_IRQn

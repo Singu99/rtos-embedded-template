@@ -2,6 +2,7 @@
 
 #include "drivers/platform.hpp"
 #include "drivers/pal/uart.hpp"
+#include "drivers/pal/gpio.hpp"
 
 #define UART_MAX_PINS 5
 #define UARTDEV_COUNT 10
@@ -10,7 +11,8 @@ namespace pal {
 
     namespace stm32 {
 
-        struct gpio_t {
+        struct gpio_stm32 {
+            gpio gpio;   
             GPIO_TypeDef* port;
             uint16_t pin;
             uint8_t af;
@@ -27,8 +29,8 @@ namespace pal {
                 DMA_Request_TypeDef txDMAChannel;
                 dmaResource_t *txDMAResource;
             #endif
-                gpio_t rxPins[UART_MAX_PINS];
-                gpio_t txPins[UART_MAX_PINS];
+                gpio_stm32 rxPins[UART_MAX_PINS];
+                gpio_stm32 txPins[UART_MAX_PINS];
                 uint32_t rcc;
                 IRQn_Type rxIrq;
                 // uint8_t txPriority;  Commented out for now
