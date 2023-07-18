@@ -83,7 +83,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/lib/CMSIS/Include
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/include
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2
-${CMAKE_CURRENT_SOURCE_DIR}/lib/etl/etl/include ) # ETL library
+${CMAKE_CURRENT_SOURCE_DIR}/lib/utilites/etl/etl/include ) # ETL library
 
 # ##############################################################################
 set(EXECUTABLE ${CMAKE_PROJECT_NAME})

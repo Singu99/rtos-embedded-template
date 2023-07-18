@@ -1,7 +1,7 @@
 #pragma once
 
 #include "drivers/pal/uart.hpp"
-#include "drivers/pal/gpio.hpp"
+#include "drivers/pal/global_io.hpp"
 
 /**
  * @brief Class used to get the configuration of the system (communications, gpio, etc). THis informations should be stored in rom (modified by configurator)
@@ -13,8 +13,8 @@ namespace config {
     class rx {
     public:
         static pal::uart::id get_rx_uart_id(); 
-        static pal::gpio get_uart_rx_pin(pal::uart::id uart_id);
-        static pal::gpio get_uart_tx_pin(pal::uart::id uart_id);
+        static pal::io_id get_uart_rx_io(pal::uart::id uart_id);
+        static pal::io_id get_uart_tx_io(pal::uart::id uart_id);
     };
 
 
