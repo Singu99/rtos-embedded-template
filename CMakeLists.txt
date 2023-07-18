@@ -82,7 +82,8 @@ ${TARGET_LIB_INCLUDE_DIRECTORIES}
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/CMSIS/Include
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/include
 ${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F
-${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2)
+${CMAKE_CURRENT_SOURCE_DIR}/lib/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2
+${CMAKE_CURRENT_SOURCE_DIR}/lib/etl/etl/include ) # ETL library
 
 # ##############################################################################
 set(EXECUTABLE ${CMAKE_PROJECT_NAME})
@@ -107,12 +108,18 @@ file(GLOB_RECURSE PROJECT_SOURCES FOLLOW_SYMLINKS
     ${PROJECT_DIR}/*.cpp
     ${PROJECT_DIR}/*.c )
 
+# ETL
+set(GIT_DIR_LOOKUP_POLICY ALLOW_LOOKING_ABOVE_CMAKE_SOURCE_DIR)
+add_subdirectory(lib/utilities/etl/etl)
 
 # Executable files
 add_executable(${EXECUTABLE}
     ${LIB_SOURCES} 
     ${PROJECT_SOURCES}
     ${STARTUP_SCRIPT})
+
+# ETL
+target_link_libraries(${EXECUTABLE} PRIVATE etl::etl)
 
 # Embedded macros(defines)
  target_compile_definitions(${EXECUTABLE} PRIVATE

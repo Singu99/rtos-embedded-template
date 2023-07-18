@@ -21,6 +21,7 @@
 
 #pragma once
 
+
 #define FC_TARGET_MCU     STM32H723
 
 #define BOARD_NAME        KONEXH723

@@ -11,24 +11,11 @@ namespace config {
 
     // Used to retrieve the configuration of the serial rx
     class rx {
-        
+    public:
         static pal::uart::id get_rx_uart_id(); 
         static pal::gpio get_uart_rx_pin(pal::uart::id uart_id);
         static pal::gpio get_uart_tx_pin(pal::uart::id uart_id);
-
-    private:
-        rx() = delete;
-        ~rx() = delete;
     };
-
-
-
-
-
-
-
-
-
 
 
 }; // namespace config

@@ -18,8 +18,8 @@
 namespace pal {
 
     namespace uart {
-        enum class id { u1 = 0, u2, u3, u4, u5, u6, u7, u8, u9 };
-        enum class bus { full_duplex = 0, half_duplex };
+        enum class id { u1 = 0, u2, u3, u4, u5, u6, u7, u8, u9, unknown };
+        enum class bus_comm { full_duplex = 0, half_duplex };
         enum class mode { tx = 0, rx, tx_rx };
         enum class status { ok = 0, error, busy, timeout, not_supported, not_opened };
     }
@@ -40,11 +40,11 @@ namespace pal {
      */ 
     class uart_device {
     public:
-
+        // NOTE: Potential abstraction using templates for device claim
         static std::optional<uart_device*> claim_device(uart::id dev_id, io::resource_id claimer);
         static bool release_device(uart_device* device, io::resource_id claimer);
 
-        virtual void open(uart::bus bus, uart::mode mode, uint32_t baudrate, uart_interruptable* rsi = nullptr) = 0;                // Open for send and interrupt         
+        virtual uart::status open(uart::bus_comm com, uart::mode mode, uint32_t baudrate, uart_interruptable* rsi = nullptr) = 0;                // Open for send and interrupt         
         virtual void close() = 0;
 
         template<typename T>
@@ -62,13 +62,16 @@ namespace pal {
     protected:
         uart_device(uart::id dev_id);                                               // for now
         ~uart_device() = default;                                                   // for now
-    
+        
+        // Internal interface with hardware
         virtual uart::status send(void* buffer, uint32_t size) = 0;
         virtual uart::status send_nonblocking(void* buffer, uint32_t size, bool recursive = false) = 0;
         virtual uart::status receive(void* buffer, uint32_t size) = 0;
         virtual uart::status receive_nonblocking(void* buffer, uint32_t size, bool recursive = false) = 0;
-    private:
+    protected:
         uart::id m_dev_id;                                                          // Keep track of which device this is
+
+    private:
         io::resource_id m_claimer;                                                  // Keep track of who is using this device
 
     };

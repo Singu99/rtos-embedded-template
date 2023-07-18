@@ -5,14 +5,18 @@
 #include "drivers/pal/gpio.hpp"
 
 #define UART_MAX_PINS 5
-#define UARTDEV_COUNT 10
+#define UARTDEV_COUNT 9
 
 namespace pal {
 
     namespace stm32 {
 
         struct gpio_stm32 {
-            gpio gpio;   
+            gpio_stm32() = default;
+            gpio_stm32(pal::gpio gpio, GPIO_TypeDef* port, uint16_t pin, uint8_t af) 
+                : gpio(gpio), port(port), pin(pin), af(af) {}
+
+            pal::gpio gpio;   
             GPIO_TypeDef* port;
             uint16_t pin;
             uint8_t af;

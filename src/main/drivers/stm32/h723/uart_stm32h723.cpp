@@ -79,7 +79,15 @@
 
 // #define USE_DMA  // TODO: Finish dma support
 
+/* ************************************************************************************************************** */
+/* @info Find the gpio to AF combination in the STM32H723 datasheet. Table 8. STM32H723 pin alternate functions   */
+/* ************************************************************************************************************** */
 
+/**
+ * The idea is that user will define the hardware of the system with the hw_t struct. The struct will be hashable. We 
+ * will identify the hardware by the key (uart_device_id). The struct will contain the hardware details of the device.
+ * We will retrieve the hardware struct with template specialization.
+*/
 
 static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
 #ifdef USE_UART1
@@ -170,14 +178,14 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
             {{pal::port::a, pal::pin::p10}, GPIOA, GPIO_PIN_10, GPIO_AF6_UART4 },
             {{pal::port::b, pal::pin::p8},  GPIOB, GPIO_PIN_8, GPIO_AF8_UART4 },
             {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF8_UART4 },
-            {{pal::port::d, pal::pin::p0},  GPIOD, GPIO_PIN_0,  GPIO_AF8_UART4 }
+            {{pal::port::d, pal::pin::p0},  GPIOD, GPIO_PIN_0,  GPIO_AF8_UART4 },
         },
         .txPins = {
             {{pal::port::a, pal::pin::p0},  GPIOA, GPIO_PIN_0,  GPIO_AF8_UART4 },
             {{pal::port::a, pal::pin::p12}, GPIOA, GPIO_PIN_12, GPIO_AF6_UART4 },
             {{pal::port::b, pal::pin::p9}, GPIOB, GPIO_PIN_9, GPIO_AF8_UART4 },
             {{pal::port::c, pal::pin::p10}, GPIOC, GPIO_PIN_10, GPIO_AF8_UART4 },
-            {{pal::port::d, pal::pin::p1},  GPIOD, GPIO_PIN_1,  GPIO_AF8_UART4 }
+            {{pal::port::d, pal::pin::p1},  GPIOD, GPIO_PIN_1,  GPIO_AF8_UART4 },
         },
         .rcc = RCC_APB1L(UART4),
         .rxIrq = UART4_IRQn
@@ -197,12 +205,12 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
         .rxPins = {
             {{pal::port::b, pal::pin::p6}, GPIOB, GPIO_PIN_6,  GPIO_AF14_UART5 },
             {{pal::port::b, pal::pin::p13}, GPIOB, GPIO_PIN_13, GPIO_AF14_UART5 },
-            {{pal::port::c, pal::pin::p12}, GPIOC, GPIO_PIN_12, GPIO_AF8_UART5 }
+            {{pal::port::c, pal::pin::p12}, GPIOC, GPIO_PIN_12, GPIO_AF8_UART5 },
         },
         .txPins = {
             {{pal::port::b, pal::pin::p5},  GPIOB, GPIO_PIN_5,  GPIO_AF14_UART5 },
             {{pal::port::b, pal::pin::p12}, GPIOB, GPIO_PIN_12, GPIO_AF14_UART5 },
-            {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF8_UART5 }
+            {{pal::port::c, pal::pin::p11}, GPIOC, GPIO_PIN_11, GPIO_AF8_UART5 },
         },
         .rcc = RCC_APB1L(UART5),
         .rxIrq = UART5_IRQn
@@ -363,6 +371,6 @@ static const std::array<pal::stm32::uart::hw_t, UARTDEV_COUNT> uartHardware = {{
 // Hardware template specialization for retrieving stm32h723 uart hardware details
 template <>
 template <>
-const pal::stm32::uart::hw_t* hardware<pal::stm32::uart::hw_t>::get(pal::uart::id id) {
+std::optional<const pal::stm32::uart::hw_t*> hardware<pal::stm32::uart::hw_t>::get(pal::uart::id id) {
     return &uartHardware[static_cast<uint8_t>(id)];
 }

@@ -1,8 +1,5 @@
 #include "config.hpp"
-
-
-// Tables defining the configuration of the system
-
+#include "board_config.hpp"         // Tables defining the configuration of the system
 
 
 
@@ -11,18 +8,24 @@
 
 
 
-/* Think about a better way to abstract this */
-pal::uart::id config::rx::get_rx_uart_id()
-{
-    return pal::uart::id();
+namespace config {
+
+    /* Interface for retreiving configuration data */
+    inline pal::uart::id rx::get_rx_uart_id()
+    {
+        return board_config::rx_uart_id;
+    }
+
+    inline pal::gpio rx::get_uart_rx_pin(pal::uart::id uart_id)
+    {
+        return board_config::uart_config_map[static_cast<uint32_t>(uart_id)].rx_pin;
+    }
+
+    inline pal::gpio rx::get_uart_tx_pin(pal::uart::id uart_id)
+    {
+        return board_config::uart_config_map[static_cast<uint32_t>(uart_id)].tx_pin;
+    }
+
 }
 
-pal::gpio config::rx::get_uart_rx_pin(pal::uart::id uart_id)
-{
-    return pal::gpio(pal::port::id::a, 10);
-}
 
-pal::gpio config::rx::get_uart_tx_pin(pal::uart::id uart_id)
-{
-    return pal::gpio();
-}
