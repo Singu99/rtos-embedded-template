@@ -33,6 +33,8 @@ namespace pal {
     {
         // Register uart interrupt
         uint32_t device_id = static_cast<uint32_t>(m_dev_id);
+
+        // The callback could be improved using a method to generate the apropriate callback
         isr::get_interrupt_vectors_instance().register_delegate(vector_ids[device_id], callback);
 
         // Open hardware specific uart
@@ -46,9 +48,9 @@ namespace pal {
 }   // namespace pal
 
 
-// ************************************************************
-// Template speciallization for getting devices specific instances
-// ************************************************************
+// ***********************************************************************************
+// Template speciallization for getting devices specific instances. Used by device.hpp
+// ***********************************************************************************
 template<>
 pal::uart_device* device::get<pal::uart_device>(pal::uart::id dev_id)
 {

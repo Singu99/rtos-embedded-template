@@ -1,4 +1,5 @@
 #include "core_controller.hpp"
+#include <etl/delegate.h>
 #include "mcu.hpp"
 #include "main.h"
 
@@ -33,9 +34,14 @@ static void LED_GPIO_Init()
 
 
 core_controller::core_controller()
-    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal))
+    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal)), m_uart(nullptr) // TODO: Provide empty devices for erros on claim
 {
     LED_GPIO_Init();
+    auto device = device::claim_device<pal::uart_device>(pal::uart::id::u1, io::resource_id::SERIAL_RX);     // 
+    if (device.has_value())
+    {
+        m_uart = device.value();
+    }
 }
 
 // Running thread will execute this function
@@ -62,7 +68,22 @@ void core_controller::Run()
 }
 
 void core_controller::Init()
+{   
+    // Open the uart device
+    m_uart->open
+    (
+        pal::uart::bus_comm::half_duplex, 
+        pal::uart::mode::tx_rx, 
+        115200, 
+        etl::delegate<void(size_t)>::create
+            <core_controller, &core_controller::interrupt_handler>(*this)
+    );
+
+}
+
+void core_controller::interrupt_handler(size_t id)
 {
+
 
 
 }

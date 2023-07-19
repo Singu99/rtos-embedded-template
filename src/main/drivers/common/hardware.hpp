@@ -7,8 +7,6 @@ template <typename hw>
 class hardware {
     public:
     
-    // TODO: Remove optional and make it constexpr. 
-
     /**
      * The idea is that we provide template specializations for the harware device that we are compiling for.
      * The template specializations will provide the hardware specific details of the device.

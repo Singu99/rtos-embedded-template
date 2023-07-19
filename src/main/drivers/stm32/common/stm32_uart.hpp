@@ -22,7 +22,7 @@ protected:
 
 private:
     void init_handle();
-
+    void interrupt_handler();
 private:
     UART_HandleTypeDef m_handle;
 };

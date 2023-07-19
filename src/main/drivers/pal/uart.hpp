@@ -35,16 +35,16 @@ namespace pal {
         virtual void close() = 0;
 
         template<typename T>
-        inline uart::status send(std::span<T> buffer) { return send(buffer.data(), buffer.size()); }
+        inline uart::status send(std::span<T> buffer) { return send(buffer.data(), buffer.size() * sizeof(T)); }
 
         template<typename T>
-        inline uart::status send_nonblocking(std::span<T> buffer, bool recursive = false) { return send_nonblocking(buffer.data(), buffer.size(), recursive); }
+        inline uart::status send_nonblocking(std::span<T> buffer, bool recursive = false) { return send_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
 
         template<typename T>
-        inline uart::status receive(std::span<T> buffer) { return receive(buffer.data(), buffer.size()); }
+        inline uart::status receive(std::span<T> buffer) { return receive(buffer.data(), buffer.size() * sizeof(T)); }
 
         template<typename T>
-        inline uart::status receive_nonblocking(std::span<T> buffer, bool recursive = true) { return receive_nonblocking(buffer.data(), buffer.size(), recursive); }
+        inline uart::status receive_nonblocking(std::span<T> buffer, bool recursive = true) { return receive_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
 
         // Public for now. Refactor later
         uart_device(uart::id dev_id);                                               // for now
