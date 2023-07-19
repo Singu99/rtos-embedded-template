@@ -15,14 +15,13 @@ protected:
 
     virtual pal::uart::status open(pal::uart::bus_comm com, pal::uart::mode mode, uint32_t baudrate) override;
     virtual void close() override;
-    virtual pal::uart::status send(void* buffer, uint32_t size) override;
-    virtual pal::uart::status send_nonblocking(void* buffer, uint32_t size, bool recursive = false) override;
+    virtual pal::uart::status send(const void* buffer, uint32_t size) override;
+    virtual pal::uart::status send_nonblocking(const void* buffer, uint32_t size, bool recursive = false) override;
     virtual pal::uart::status receive(void* buffer, uint32_t size) override;
     virtual pal::uart::status receive_nonblocking(void* buffer, uint32_t size, bool recursive = false) override;
 
 private:
     void init_handle();
-    void interrupt_handler();
 private:
     UART_HandleTypeDef m_handle;
 };

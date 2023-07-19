@@ -12,11 +12,15 @@ void rx_controller::Init()
 
 void rx_controller::Run()
 {
-
     while (true)
     {
-        
+        if (m_ghst.FrameStatus() & RX_FRAME_PROCESSING_REQUIRED)
+        {
+            m_ghst.ProcessFrame();
 
 
+
+            
+        }       
     }
 }

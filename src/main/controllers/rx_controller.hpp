@@ -3,6 +3,8 @@
 #include "runnable.hpp"
 #include "memory/pool_allocator.hpp"
 
+#include "rx/ghst.hpp"
+
 class rx_controller : public Runnable, public PoolAllocator<rx_controller, 1> {
 
 public:
@@ -15,5 +17,5 @@ public:
     virtual void Run() override;
     virtual void Init() override;
 private:
-
+    Ghst m_ghst;
 };

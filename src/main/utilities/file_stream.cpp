@@ -1,10 +1,14 @@
-#include <array>
+#include <etl/array.h>
+#include <etl/delegate.h>
+#include <etl/span.h>
 
-#include "file_stream.h"
-#include "drivers/platform_abstraction_layer/usart.h"
+#include "file_stream.hpp"
+#include "drivers/pal/uart.hpp"
+#include "drivers/common/device.hpp"
+
 
 // Descripors
-static Pal::Usart usart(Pal::Usart::Id::ID1);
+static pal::uart_device* uart1 = nullptr;
 
 FileStream::FileStream() 
     : mFileDescriptor(1), mRadixSetting(RadixEnum::Hexadecimal) 
@@ -20,7 +24,8 @@ FileStream::FileStream(size_t fd)
 FileStream&  FileStream::operator<<(const char* string)
 {
     const size_t length = std::strlen(string);
-    usart.TransmitBlocking(string, length);
+    etl::span buffer = etl::span(string, length);
+    uart1->send(buffer);
     return *this;
 }
 
@@ -77,8 +82,8 @@ FileStream &FileStream::operator<<(unsigned int value)
         last -= 1;
     }
 
-    usart.TransmitBlocking(fielddata, fieldindex);
-
+    etl::span<char> buffer(fielddata, fieldindex);
+    uart1->send(buffer);
     return *this;
 }
 
@@ -102,9 +107,12 @@ void FileStream::Configure()
     switch (mFileDescriptor)
     {
     case 1:
-        usart.Init(115200);
-        break;
-    default:
+        auto optional = device::claim_device<pal::uart_device>(pal::uart::id::u1, io::resource_id::FILE_STREAM);
+        if (optional.has_value())
+        {
+            uart1 = optional.value();
+            uart1->open(pal::uart::bus_comm::full_duplex, pal::uart::mode::tx, 115200, [](size_t){});
+        }
         break;
     }
 }

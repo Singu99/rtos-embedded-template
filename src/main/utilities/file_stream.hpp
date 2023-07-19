@@ -3,8 +3,6 @@
 #include <chrono>
 #include <cstring>
 
-#include "drivers/platform_abstraction_layer/usart.h"
-
 // @Note: Needs to implement write based on descriptor
 class FileStream
 {

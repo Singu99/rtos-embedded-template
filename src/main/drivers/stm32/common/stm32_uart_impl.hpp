@@ -10,6 +10,8 @@
 #define UART_MAX_PINS 5
 #define UARTDEV_COUNT 9
 
+// TODO: Look for refactoring this
+
 namespace pal {
 
     namespace stm32 {

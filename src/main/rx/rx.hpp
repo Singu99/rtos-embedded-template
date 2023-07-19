@@ -1,8 +1,9 @@
 #pragma once
 
-#include "devices/device.h"
+#include "drivers/common/device.hpp"
 
-#include "drivers/platform_abstraction_layer/usart.h"
+#include "drivers/pal/uart.hpp"
+#include "drivers/pal/timer.hpp"
 
 #define RSSI_MAX_VALUE 1023
 #define LINK_QUALITY_MAX_VALUE 1023
@@ -44,7 +45,7 @@ typedef enum {
     RSSI_SOURCE_RX_PROTOCOL_CRSF,
 } rssiSource_e;
 
-class Rx : public Pal::SerialInterruptable {
+class Rx {
 public:
     Rx();
     ~Rx() = default;
@@ -59,10 +60,6 @@ public:
     virtual bool ProcessFrame() { return false; };
     virtual uint32_t FrameTime() { return 0;};
 
-public:
-    virtual void OnRxInterrupt() override;
-    virtual void OnTxInterrupt() override;
-
 protected:
     // Attribs
     uint16_t m_data;
@@ -76,6 +73,7 @@ protected:
     rssiSource_e rssiSource;
 
 protected:    // Peripherials
-    Pal::Usart m_usart;
+    pal::uart_device* m_uart;
+    pal::timer_device* m_timer;
 
 };

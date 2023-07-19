@@ -72,17 +72,17 @@ void uart_device_stm32::close()
 /**
  * Transmit data in blocking mode
 */
-pal::uart::status uart_device_stm32::send(void *buffer, uint32_t size)
+pal::uart::status uart_device_stm32::send(const void *buffer, uint32_t size)
 {
-    HAL_UART_Transmit(&m_handle, static_cast<uint8_t*>(buffer), size, 1000);
+    HAL_UART_Transmit(&m_handle, static_cast<const uint8_t*>(buffer), size, 1000);
     return pal::uart::status::ok;
 }
 
 /*
 */
-pal::uart::status uart_device_stm32::send_nonblocking(void *buffer, uint32_t size, bool recursive)
+pal::uart::status uart_device_stm32::send_nonblocking(const void *buffer, uint32_t size, bool recursive)
 {
-    HAL_UART_Transmit_IT(&m_handle, static_cast<uint8_t*>(buffer), size);
+    HAL_UART_Transmit_IT(&m_handle, static_cast<const uint8_t*>(buffer), size);
     return pal::uart::status::ok;
 }
 

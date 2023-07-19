@@ -1,7 +1,10 @@
 #include <etl/array.h>
 
 #include "uart.hpp"
+
 #include "isr.hpp"
+
+#include "target/target.h"
 
 /* **** Architectures Start **** */
 #ifdef STM32
@@ -13,6 +16,7 @@
 #else
 #error "No architecture defined"
 #endif
+/* **** Architectures End **** */
 
 
 namespace pal {

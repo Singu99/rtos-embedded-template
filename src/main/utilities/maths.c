@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "platform.h"
 
 #include "axis.h"
 #include "maths.h"

@@ -1,6 +1,10 @@
-#include "ghst.h"
+#include "ghst.hpp"
 #include "utilities/crc.h"          // Move to etl
 #include "utilities/maths.h"        // Move to etl
+
+#include "etl/delegate_service.h"
+#include "etl/delegate.h"
+
 /*
  * This file is part of Cleanflight and Betaflight.
  *
@@ -69,12 +73,20 @@ Ghst::Ghst()
     ghstIncomingFrame(&ghstFrameBuffer[0]),
     ghstValidatedFrame(&ghstFrameBuffer[1]),
     ghstChannelData{},
-    ghstRfProtocol(GHST_RF_PROTOCOL_UNDEFINED),
-    m_timer(Pal::Timer::Id::ID5)
+    ghstRfProtocol(GHST_RF_PROTOCOL_UNDEFINED)
 {
-    m_timer.Start(44);
-    m_usart.HalfDuplexInit(GHST_RX_BAUDRATE);
-    m_usart.ReceiveNonBlocking(&m_rxUsartData, 1, this, true);
+    m_uart->open
+    (
+        pal::uart::bus_comm::half_duplex, 
+        pal::uart::mode::tx_rx, 
+        GHST_RX_BAUDRATE, 
+        etl::delegate<void(size_t)>::create
+            <Ghst, &Ghst::OnRxInterrupt>(*this)
+    );
+    
+    m_uart->receive_nonblocking(rx_buffer);
+    m_timer->configure_timebase(0xFFFFFFFF, 0);
+    m_timer->start();
 }
 
 void Ghst::ghstRxWriteTelemetryData(const void *const data, const int len)
@@ -293,10 +305,10 @@ uint32_t Ghst::FrameTime()
     return 0;
 }
 
-void Ghst::OnRxInterrupt()
+void Ghst::OnRxInterrupt(size_t id)
 {
     static uint8_t ghstFrameIdx = 0;    // @ TODO: From static to class member
-    const uint32_t currentTimeUs = m_timer.GetTicks(); // microsISR(); // get system uptime in microseconds @ TODO
+    const uint32_t currentTimeUs = m_timer->get_counter(); // microsISR(); // get system uptime in microseconds @ TODO
 
     if ((currentTimeUs - ghstRxFrameStartAtUs) > GHST_MAX_FRAME_TIME_US) {
         // Character received after the max. frame time, assume that this is a new frame
@@ -328,7 +340,7 @@ void Ghst::OnRxInterrupt()
                 ghstFrameAvailable = true;
 
                 // remember what time the incoming (Rx) packet ended, so that we can ensure a quite bus before sending telemetry
-                ghstRxFrameEndAtUs = m_timer.GetTicks();// microsISR(); // get system uptime in microseconds @ TODO
+                ghstRxFrameEndAtUs = m_timer->get_counter();// microsISR(); // get system uptime in microseconds @ TODO
             }
         }
     }

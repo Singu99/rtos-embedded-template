@@ -1,7 +1,6 @@
 #pragma once
 
 #include <optional>
-#include <span>
 #include <cstdint>
 
 #include "target/target.h"
@@ -12,6 +11,7 @@
 
 #include <etl/delegate_service.h>
 #include <etl/delegate.h>
+#include <etl/span.h>
 
 // ...
 
@@ -35,18 +35,18 @@ namespace pal {
         virtual void close() = 0;
 
         template<typename T>
-        inline uart::status send(std::span<T> buffer) { return send(buffer.data(), buffer.size() * sizeof(T)); }
+        inline uart::status send(etl::span<T> buffer) { return send(buffer.data(), buffer.size() * sizeof(T)); }
 
         template<typename T>
-        inline uart::status send_nonblocking(std::span<T> buffer, bool recursive = false) { return send_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
+        inline uart::status send_nonblocking(etl::span<T> buffer, bool recursive = false) { return send_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
 
         template<typename T>
-        inline uart::status receive(std::span<T> buffer) { return receive(buffer.data(), buffer.size() * sizeof(T)); }
+        inline uart::status receive(etl::span<T> buffer) { return receive(buffer.data(), buffer.size() * sizeof(T)); }
 
         template<typename T>
-        inline uart::status receive_nonblocking(std::span<T> buffer, bool recursive = true) { return receive_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
+        inline uart::status receive_nonblocking(etl::span<T> buffer, bool recursive = true) { return receive_nonblocking(buffer.data(), buffer.size() * sizeof(T), recursive); }
 
-        // Public for now. Refactor later
+        // Public for now(we are constructing the objects on device get method). Refactor later
         uart_device(uart::id dev_id);                                               // for now
         ~uart_device() = default;                                                   // for now
     protected:
@@ -56,8 +56,8 @@ namespace pal {
         // ************************************************************
         virtual uart::status open(uart::bus_comm com, uart::mode mode, uint32_t baudrate) = 0;
 
-        virtual uart::status send(void* buffer, uint32_t size) = 0;
-        virtual uart::status send_nonblocking(void* buffer, uint32_t size, bool recursive) = 0;
+        virtual uart::status send(const void* buffer, uint32_t size) = 0;
+        virtual uart::status send_nonblocking(const void* buffer, uint32_t size, bool recursive) = 0;
         virtual uart::status receive(void* buffer, uint32_t size) = 0;
         virtual uart::status receive_nonblocking(void* buffer, uint32_t size, bool recursive) = 0;
     protected:
