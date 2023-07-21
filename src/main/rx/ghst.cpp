@@ -1,6 +1,6 @@
 #include "ghst.hpp"
-#include "utilities/crc.h"          // Move to etl
-#include "utilities/maths.h"        // Move to etl
+#include "utilities/crc.hpp"          // Move to etl
+#include "utilities/maths.hpp"        // Move to etl
 
 #include "etl/delegate_service.h"
 #include "etl/delegate.h"
@@ -75,17 +75,15 @@ Ghst::Ghst()
     ghstChannelData{},
     ghstRfProtocol(GHST_RF_PROTOCOL_UNDEFINED)
 {
-    m_uart->open
-    (
+    m_uart->open(
         pal::uart::bus_comm::half_duplex, 
         pal::uart::mode::tx_rx, 
         GHST_RX_BAUDRATE, 
         etl::delegate<void(size_t)>::create
-            <Ghst, &Ghst::OnRxInterrupt>(*this)
-    );
+            <Ghst, &Ghst::OnRxInterrupt>(*this));
     
     m_uart->receive_nonblocking(rx_buffer);
-    m_timer->configure_timebase(0xFFFFFFFF, 0);
+    m_timer->configure_timebase(0xFFFFFFFF, 549);         // Change it for micros
     m_timer->start();
 }
 
@@ -344,6 +342,9 @@ void Ghst::OnRxInterrupt(size_t id)
             }
         }
     }
+
+    // Continuous reception 
+    m_uart->receive_nonblocking(rx_buffer);
 }
 
 

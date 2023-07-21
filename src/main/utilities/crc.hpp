@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 struct sbuf_s;
 
@@ -24,3 +28,7 @@ void crc8_xor_sbuf_append(struct sbuf_s *dst, uint8_t *start);
 #define FNV_OFFSET_BASIS    2166136261
 
 uint32_t fnv_update(uint32_t hash, const void *data, uint32_t length);
+
+#ifdef __cplusplus
+}
+#endif

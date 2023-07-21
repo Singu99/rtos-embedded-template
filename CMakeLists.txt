@@ -54,7 +54,7 @@ elseif(MCU_TARGET MATCHES "^STM32H723")
         set(MCU_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/src/link/STM32H723VETX_FLASH.ld)        
     elseif(MCU_TARGET MATCHES "STM32H723VGT6")
         set(STARTUP_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/src/main/startup/startup_stm32h723vgtx.s)
-        set(MCU_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/src/link/stm32_flash_h723_1m.ld)
+        set(MCU_LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/src/link/STM32H723VGTX_FLASH.ld)
     endif()
 
     # FreeRTOS

@@ -14,14 +14,14 @@ class device {
 public:
 
     template<typename dev, typename id>
-    static std::optional<dev*> claim_device(id dev_id, io::resource_id claimer) 
+    static dev* claim_device(id dev_id, io::resource_id claimer) 
     {
         dev* device = device::get<dev>(dev_id);
         if (device->m_claimer == io::resource_id::FREE || device->m_claimer == claimer) {
             device->m_claimer = claimer;
             return device;
         } 
-        return {};
+        return nullptr;
     }
     
     template<typename dev>
@@ -40,7 +40,7 @@ protected:
     static dev* get(id dev_id);
 
 protected:
-    device() : m_claimer(io::resource_id::FREE) {};
+    explicit device() : m_claimer(io::resource_id::FREE) {};
     ~device() = default;
 
 private:

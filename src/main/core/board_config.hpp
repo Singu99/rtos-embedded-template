@@ -38,7 +38,7 @@ namespace board_config {
             .rx_pin = { pal::port::A, pal::pin::_3 },
         },
         {
-            .id = pal::uart::id::unknown, 
+            .id = pal::uart::id::u3, 
             .tx_pin = { pal::port::D, pal::pin::_0 }, 
             .rx_pin = { pal::port::D, pal::pin::_1 },
         },
@@ -48,14 +48,14 @@ namespace board_config {
             .rx_pin = { pal::port::A, pal::pin::_1 },
         },
         {
-            .id = pal::uart::id::unknown, 
+            .id = pal::uart::id::u5, 
             .tx_pin = { pal::port::D, pal::pin::_0 }, 
             .rx_pin = { pal::port::D, pal::pin::_1 },
         },
         {
             .id = pal::uart::id::u6, 
-            .tx_pin = { pal::port::D, pal::pin::_6 }, 
-            .rx_pin = { pal::port::D, pal::pin::_7 },
+            .tx_pin = { pal::port::C, pal::pin::_6 }, 
+            .rx_pin = { pal::port::C, pal::pin::_7 },
         },
         {
             .id = pal::uart::id::u7, 

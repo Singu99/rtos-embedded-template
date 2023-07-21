@@ -12,9 +12,14 @@
 
 #include "controllers/core_controller.hpp"
 #include "controllers/rx_controller.hpp"
+#include "controllers/dshot_controller.hpp"
 
-core_controller* core;
-rx_controller* rx;
+namespace mcu
+{
+    core_controller* core;
+    rx_controller* rx;
+    dshot_controller* dshot;
+}
 
 int main()
 {
@@ -24,18 +29,20 @@ int main()
 
     osKernelInitialize();
 
-    // Controller initialization
-    core = factory::create<core_controller>();
-    rx = factory::create<rx_controller>();
-
-    // TODO: Change to std::optional
-    if (core == nullptr || rx == nullptr)   while (1);
+    // Controller construction
+    mcu::core = factory::create<core_controller>();
+    mcu::rx = factory::create<rx_controller>();
+    mcu::dshot = factory::create<dshot_controller>();
     
-    core->Init();
-    rx->Init();
+    // Controller initialization
+    mcu::core->Init();
+    mcu::rx->Init();
+    mcu::dshot->Init();
 
+    // Start the kernel
     osKernelStart();
 
+    // Should never reach this point
     while (1);
     
     return 0;

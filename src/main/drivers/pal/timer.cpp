@@ -20,7 +20,8 @@
 
 namespace pal {
 
-    static const etl::array<isr::vector_id, 10> vector_ids = {
+    static constexpr size_t timer_count = static_cast<size_t>(pal::timer::id::COUNT);
+    static const etl::array<isr::vector_id, timer_count> vector_ids = {
         isr::vector_id::TIM1_IRQ_HANDLER,
         isr::vector_id::TIM2_IRQ_HANDLER,
         isr::vector_id::TIM3_IRQ_HANDLER,
@@ -29,8 +30,12 @@ namespace pal {
         isr::vector_id::TIM6_IRQ_HANDLER,
         isr::vector_id::TIM7_IRQ_HANDLER,
         isr::vector_id::TIM8_IRQ_HANDLER,
-        isr::vector_id::TIM9_IRQ_HANDLER,
-        isr::vector_id::TIM10_IRQ_HANDLER
+        isr::vector_id::TIM12_IRQ_HANDLER,
+        isr::vector_id::TIM13_IRQ_HANDLER,
+        isr::vector_id::TIM14_IRQ_HANDLER,
+        isr::vector_id::TIM15_IRQ_HANDLER,
+        isr::vector_id::TIM16_IRQ_HANDLER,
+        isr::vector_id::TIM17_IRQ_HANDLER
     };
 
 

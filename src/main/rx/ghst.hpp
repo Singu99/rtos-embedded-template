@@ -61,7 +61,4 @@ private:
     uint8_t m_rxUsartData = 0;
     etl::span<uint8_t> rx_buffer = {&m_rxUsartData, 1};
 
-private:
-    pal::timer_device* m_timer;
-
 };

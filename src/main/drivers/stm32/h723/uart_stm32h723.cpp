@@ -1,5 +1,5 @@
 #include "drivers/platform.hpp"
-#include "drivers/rcc.h"
+#include "drivers/rcc.hpp"
 #include "drivers/common/hardware.hpp"
 #include "drivers/stm32/common/stm32_uart_impl.hpp"
 
@@ -386,6 +386,7 @@ template <>
 template <>
 const pal::stm32::uart_hardware_t* hardware<pal::stm32::uart_hardware_t>::get(pal::uart::id id) {
     // return &uartHardware.at(id);
+    // Bug. Why calling the operator equal is causing hard fault? Fix:  
     return &uartHardware.at(id);
 }
 

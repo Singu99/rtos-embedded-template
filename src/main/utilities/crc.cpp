@@ -1,4 +1,4 @@
-#include "crc.h"
+#include "crc.hpp"
 
 
 uint16_t crc16_ccitt(uint16_t crc, unsigned char a)

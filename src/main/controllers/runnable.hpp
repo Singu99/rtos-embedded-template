@@ -14,8 +14,8 @@ public:
 
 protected:
     const char* m_Name;
-    osThreadId_t m_ThreadID;
     const osThreadAttr_t m_Attr;
+    osThreadId_t m_ThreadID;
 protected:
     static inline osThreadAttr_t initThreadAttr(const char* name, uint32_t stackSize, osPriority_t priority)
     {

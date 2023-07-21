@@ -7,7 +7,8 @@
 #include "drivers/common/device.hpp"
 
 
-class core_controller : public Runnable, public PoolAllocator<core_controller, 1> {
+
+class core_controller : public Runnable, public PoolAllocator<core_controller,1> {
 public:
     core_controller();
     ~core_controller() = default;

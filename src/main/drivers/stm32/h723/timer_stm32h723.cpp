@@ -6,7 +6,7 @@
 
 #include "drivers/platform.hpp"
 #include "drivers/common/hardware.hpp"
-#include "drivers/rcc.h"
+#include "drivers/rcc.hpp"
 
 static constexpr size_t TIM_COUNT = static_cast<uint32_t>(pal::timer::id::COUNT);
 static const etl::unordered_map<pal::timer::id, pal::stm32::timer_hardware_t, TIM_COUNT> timer_hardware = {

@@ -107,10 +107,10 @@ void FileStream::Configure()
     switch (mFileDescriptor)
     {
     case 1:
-        auto optional = device::claim_device<pal::uart_device>(pal::uart::id::u1, io::resource_id::FILE_STREAM);
-        if (optional.has_value())
+        auto optional = device::claim_device<pal::uart_device>(pal::uart::id::u2, io::resource_id::FILE_STREAM);
+        if (optional)
         {
-            uart1 = optional.value();
+            uart1 = optional;
             uart1->open(pal::uart::bus_comm::full_duplex, pal::uart::mode::tx, 115200, [](size_t){});
         }
         break;

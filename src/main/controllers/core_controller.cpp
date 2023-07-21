@@ -3,6 +3,7 @@
 #include "mcu.hpp"
 #include "main.h"
 
+
 // Initializes GPIOD PIN 2
 static void LED_GPIO_Init()
 {
@@ -34,50 +35,47 @@ static void LED_GPIO_Init()
 
 
 core_controller::core_controller()
-    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal)), m_uart(nullptr) // TODO: Provide empty devices for erros on claim
+    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096 * 2, osPriorityNormal)), m_uart(nullptr) // TODO: Provide empty devices for erros on claim
 {
     LED_GPIO_Init();
-    auto device = device::claim_device<pal::uart_device>(pal::uart::id::u1, io::resource_id::SERIAL_RX);     // 
-    if (device.has_value())
-    {
-        m_uart = device.value();
-    }
 }
 
 // Running thread will execute this function
 void core_controller::Run()
 {
     // Init GPIOD PIN 2 using HAL library
-
-
+    pal::timer_device* timer = device::claim_device<pal::timer_device>(pal::timer::id::t5, io::resource_id::FILE_STREAM);
+    timer->configure_timebase(0xFFFFFFFF, 1000);
+    timer->start();
     // Toggle the leds every 1 second
     while (true)
     {
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
-        osDelay(1000);
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_3);
-        osDelay(1000);
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_3);
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
-        osDelay(1000);
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
-        mcu::rx->getChannel(0);
+        while(timer->get_counter() < 100000);
+        timer->reset();
+        if (mcu::rx->getChannel(0) < 1300)
+        {
+            HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET);
+        }
+        else if (mcu::rx->getChannel(0) > 1700)
+        {
+            HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_SET);
+        }
+        else {
+            HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_3);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_SET);
+        }        
     }
     
 }
 
 void core_controller::Init()
 {   
-    // Open the uart device
-    m_uart->open
-    (
-        pal::uart::bus_comm::half_duplex, 
-        pal::uart::mode::tx_rx, 
-        115200, 
-        etl::delegate<void(size_t)>::create
-            <core_controller, &core_controller::interrupt_handler>(*this)
-    );
+
 
 }
 

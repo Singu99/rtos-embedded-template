@@ -9,7 +9,7 @@
 class uart_device_stm32 : public pal::uart_device {
 public:
     uart_device_stm32(pal::uart::id dev_id);
-    ~uart_device_stm32();
+    ~uart_device_stm32() = default;
 
 protected:
 

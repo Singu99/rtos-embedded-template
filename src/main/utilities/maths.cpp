@@ -24,7 +24,7 @@
 
 
 #include "axis.h"
-#include "maths.h"
+#include "maths.hpp"
 
 #if defined(FAST_MATH) || defined(VERY_FAST_MATH)
 #if defined(VERY_FAST_MATH)

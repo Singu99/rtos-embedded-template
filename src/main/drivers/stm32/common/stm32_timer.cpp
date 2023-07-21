@@ -1,7 +1,7 @@
 #include "stm32_timer.hpp"
 #include "stm32_timer_impl.hpp"
 #include "drivers/common/hardware.hpp"
-
+#include "drivers/rcc.hpp"
 
 timer_device_stm32::timer_device_stm32(pal::timer::id dev_id)
     : timer_device(dev_id)
@@ -40,11 +40,15 @@ void timer_device_stm32::reset()
 
 uint32_t timer_device_stm32::get_counter()
 {
-    return __HAL_TIM_GET_COUNTER(&m_handle);
+    uint32_t counter = __HAL_TIM_GET_COUNTER(&m_handle);
+    return counter;
 }
 
 void timer_device_stm32::init_handle()
 {
     const auto* tim_hw = hardware<pal::stm32::timer_hardware_t>::get(m_dev_id);
     m_handle.Instance = tim_hw->reg;
+
+    // Init timer clock
+    RCC_ClockCmd(tim_hw->rcc, ENABLE);
 }

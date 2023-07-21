@@ -14,13 +14,10 @@ void rx_controller::Run()
 {
     while (true)
     {
-        if (m_ghst.FrameStatus() & RX_FRAME_PROCESSING_REQUIRED)
+        if (m_ghst.FrameStatus() != RX_FRAME_PENDING)
         {
             m_ghst.ProcessFrame();
-
-
-
-            
+            output = m_ghst.ReadRawRc(0);
         }       
     }
 }

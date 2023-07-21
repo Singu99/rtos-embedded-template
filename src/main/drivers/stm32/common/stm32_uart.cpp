@@ -6,7 +6,7 @@
 #include "drivers/common/hardware.hpp"
 #include "stm32_uart.hpp"
 #include "config.hpp"
-#include "drivers/rcc.h"
+#include "drivers/rcc.hpp"
 #include "drivers/pal/global_io.hpp"
 #include "drivers/pal/isr.hpp"
 
@@ -38,7 +38,10 @@ pal::uart::status uart_device_stm32::open(pal::uart::bus_comm com, pal::uart::mo
 {
     // Retreive hardware
     const auto uartHardware = hardware<pal::stm32::uart_hardware_t>::get(m_dev_id);
-        
+    
+    // Configure clock
+    RCC_ClockCmd(uartHardware->rcc, ENABLE);
+
     // Init uart structure
     m_handle.Init.BaudRate = baudrate;
     m_handle.Init.Mode = mode_table.at(mode);
@@ -183,11 +186,10 @@ extern "C" {
     void USART6_IRQHandler(void)
     {
         if (uart_handle_table.find(pal::uart::id::u6) != uart_handle_table.end()) {
-            // Configured class instance callback
-            isr::get_interrupt_vectors_instance().call<isr::vector_id::UART6_IRQ_HANDLER>();
             // HAL library callback
             HAL_UART_IRQHandler(uart_handle_table.at(pal::uart::id::u6));
-            // Custom uart driver callback
+            // Configured class instance callback
+            isr::get_interrupt_vectors_instance().call<isr::vector_id::UART6_IRQ_HANDLER>();
             return;
         }
         // uart isr callback (for configuration) 
