@@ -73,6 +73,10 @@ void pal::global_io::configure_pin(pal::uart::id uart_id, io_id io)
     // TODO: Return error state
 }
 
+void pal::global_io::configure_pin(pal::timer::id timer_id, io_id io)
+{
+    
+}
 
 
 /* gpio clock inits */

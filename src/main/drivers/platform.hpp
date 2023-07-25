@@ -9,6 +9,7 @@
 #include <stm32h7xx_hal_tim.h>
 #include <stm32h7xx_hal_uart.h>
 #include <stm32h7xx_hal_gpio.h>
+#include <stm32h7xx_hal_dma.h>
 #if __cplusplus
 #pragma GCC diagnostic pop
 #endif

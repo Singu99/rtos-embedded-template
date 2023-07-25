@@ -2,6 +2,7 @@
 
 #include "etl/vector.h"
 #include "drivers/pal/uart.hpp"
+#include "drivers/pal/timer.hpp"
 
 namespace pal {
 
@@ -32,6 +33,9 @@ namespace pal {
 
         // Uart pin configuration
         static void configure_pin(uart::id uart_id, io_id io);
+
+        // Timer pin configuration
+        static void configure_pin(timer::id timer_id, io_id io);
         
         // Rest of pin configurations
         // ....

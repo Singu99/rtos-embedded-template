@@ -1,5 +1,7 @@
 #pragma once
 
+#include <etl/span.h>
+
 #include "drivers/platform.hpp"
 #include "drivers/pal/timer.hpp"
 
@@ -15,6 +17,14 @@ public:
     virtual void stop() override;
     virtual void reset() override;
     virtual uint32_t get_counter() override;
+
+    virtual void configure_pwm(uint32_t prescaler, uint32_t period, pal::timer::channel channel) override;
+    virtual void stop_pwm(pal::timer::channel channel) override;
+
+    inline TIM_HandleTypeDef* get_handle() { return &m_handle; }
+
+protected:
+    virtual void start_pwm(pal::timer::channel channel, uint32_t* buffer, uint32_t lenght) override;
 
 private:
     void init_handle();

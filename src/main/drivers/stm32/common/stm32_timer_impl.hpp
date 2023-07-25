@@ -15,10 +15,17 @@ namespace pal {
 
     namespace stm32 {
 
+        struct timer_channel_hw_t
+        {
+            uint32_t af;
+            uint32_t dma_req;
+        };
+
         struct timer_hardware_t {
             TIM_TypeDef* reg;
             uint32_t rcc;
             IRQn_Type isr;
+            timer_channel_hw_t channels[4];
         };
         
     }

@@ -35,7 +35,7 @@ static void LED_GPIO_Init()
 
 
 core_controller::core_controller()
-    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096 * 2, osPriorityNormal)), m_uart(nullptr) // TODO: Provide empty devices for erros on claim
+    : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal)), m_uart(nullptr) // TODO: Provide empty devices for erros on claim
 {
     LED_GPIO_Init();
 }
