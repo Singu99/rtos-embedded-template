@@ -35,7 +35,7 @@ namespace pal {
         static void configure_pin(uart::id uart_id, io_id io);
 
         // Timer pin configuration
-        static void configure_pin(timer::id timer_id, io_id io);
+        static void configure_pin(timer::id timer_id, pal::timer::channel channel, io_id io);
         
         // Rest of pin configurations
         // ....

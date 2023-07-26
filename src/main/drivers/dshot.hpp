@@ -1,7 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <etl/array.h>
+
 #include "drivers/pal/timer.hpp"
+#include "drivers/pal/dma.hpp"
 
 // TODO: Timer device drivers
 
@@ -13,7 +16,7 @@ public:
         DSHOT_150 = 150
     };
 
-    dshot(dshot_speed speed, pal::timer_device* timer, pal::timer::channel channel);
+    dshot(dshot_speed speed);
     ~dshot() = default;
 
     void write(uint16_t value);
@@ -31,6 +34,7 @@ private:
 
     // DMA
     static constexpr uint32_t MOTOR_BUFFER_SIZE = 18; 
-    uint32_t m_motor_dma_buffer[MOTOR_BUFFER_SIZE];             // DMA buffer for the motor PWM duty cycles
+    etl::array<uint32_t,MOTOR_BUFFER_SIZE> m_motor_dma_buffer;             // DMA buffer for the motor PWM duty cycles
+    pal::dma_device* m_dma;                                     // DMA device for the PWM generation
 };
 

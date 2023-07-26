@@ -15,7 +15,15 @@ namespace config {
         static pal::uart::id get_rx_uart_id(); 
         static pal::io_id get_uart_rx_io(pal::uart::id uart_id);
         static pal::io_id get_uart_tx_io(pal::uart::id uart_id);
+
+
     };
 
+    class motor {
+    public:
+    
+        static pal::io_id get_timer_channel_io_id(pal::timer::id t_id, pal::timer::channel t_channel);
+
+    };
 
 }; // namespace config

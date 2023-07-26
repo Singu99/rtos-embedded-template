@@ -3,6 +3,7 @@
 #include "runnable.hpp"
 #include "memory/pool_allocator.hpp"
 
+#include "drivers/dshot.hpp"
 
 
 
@@ -19,6 +20,9 @@ public:
 private:
 
 
+private:
+    dshot m_dshot;
+    
 };
 
 

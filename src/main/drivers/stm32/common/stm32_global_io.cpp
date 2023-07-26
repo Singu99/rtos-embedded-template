@@ -1,8 +1,10 @@
 #include <etl/array.h>
+#include <etl/map.h>
 
 #include "drivers/pal/global_io.hpp"
 
 #include "drivers/stm32/common/stm32_uart_impl.hpp"
+#include "drivers/stm32/common/stm32_timer_impl.hpp"
 
 #include "drivers/common/hardware.hpp"
 
@@ -24,7 +26,7 @@ static void initClockPortK();
 /**
  * @brief: gpio clock table
  */
-static const etl::unordered_map<pal::port, void(*)(), static_cast<size_t>(pal::port::COUNT)> initClockPort = {
+static const etl::map<pal::port, void(*)(), static_cast<size_t>(pal::port::COUNT)> initClockPort = {
     { pal::port::A, initClockPortA},
     { pal::port::B, initClockPortB},
     { pal::port::C, initClockPortC},
@@ -38,7 +40,40 @@ static const etl::unordered_map<pal::port, void(*)(), static_cast<size_t>(pal::p
     { pal::port::K, initClockPortK}
 };
 
+static const etl::map<pal::port, GPIO_TypeDef*, static_cast<size_t>(pal::port::COUNT)> portToGpio = {
+    { pal::port::A, GPIOA},
+    { pal::port::B, GPIOB},
+    { pal::port::C, GPIOC},
+    { pal::port::D, GPIOD},
+    { pal::port::E, GPIOE},
+    { pal::port::F, GPIOF},
+    { pal::port::G, GPIOG},
+    { pal::port::H, GPIOH},
+    #ifdef GPIOI
+    { pal::port::I, GPIOI},
+    #endif
+    { pal::port::J, GPIOJ},
+    { pal::port::K, GPIOK}
+};
 
+static const etl::map<pal::pin, uint32_t, static_cast<size_t>(pal::pin::COUNT)> pinToGpioPin = {
+    { pal::pin::_0, GPIO_PIN_0},
+    { pal::pin::_1, GPIO_PIN_1},
+    { pal::pin::_2, GPIO_PIN_2},
+    { pal::pin::_3, GPIO_PIN_3},
+    { pal::pin::_4, GPIO_PIN_4},
+    { pal::pin::_5, GPIO_PIN_5},
+    { pal::pin::_6, GPIO_PIN_6},
+    { pal::pin::_7, GPIO_PIN_7},
+    { pal::pin::_8, GPIO_PIN_8},
+    { pal::pin::_9, GPIO_PIN_9},
+    { pal::pin::_10, GPIO_PIN_10},
+    { pal::pin::_11, GPIO_PIN_11},
+    { pal::pin::_12, GPIO_PIN_12},
+    { pal::pin::_13, GPIO_PIN_13},
+    { pal::pin::_14, GPIO_PIN_14},
+    { pal::pin::_15, GPIO_PIN_15}
+};
 
 void pal::global_io::configure_pin(pal::uart::id uart_id, io_id io)
 {
@@ -73,10 +108,27 @@ void pal::global_io::configure_pin(pal::uart::id uart_id, io_id io)
     // TODO: Return error state
 }
 
-void pal::global_io::configure_pin(pal::timer::id timer_id, io_id io)
+// Refactor this
+void pal::global_io::configure_pin(pal::timer::id timer_id, pal::timer::channel channel, io_id io)
 {
-    
+    const auto timerHardware = hardware<pal::stm32::timer_hardware_t>::get(timer_id);
+
+    // Enable clock for port
+    initClockPort.at(io.port_id)();
+
+    GPIO_InitTypeDef GPIO_InitStruct = {};
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Pin = pinToGpioPin.at(io.pin_id);
+    GPIO_InitStruct.Alternate = timerHardware->channels[static_cast<uint32_t>(channel)].af;
+    HAL_GPIO_Init(portToGpio.at(io.port_id), &GPIO_InitStruct);
 }
+
+
+//****************
+// Module mappings
+//****************
 
 
 /* gpio clock inits */

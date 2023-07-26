@@ -24,7 +24,7 @@ namespace pal {
         virtual void configure_pwm(uint32_t prescaler, uint32_t period, timer::channel channel) = 0;
 
         template<typename T>
-        void start_pwm(pal::timer::channel channel, etl::span<T> buffer) { start_pwm(channel, reinterpret_cast<uint8_t*>(buffer.data()), buffer.size());}
+        void start_pwm(pal::timer::channel channel, etl::span<T> buffer) { start_pwm(channel, static_cast<uint32_t*>(buffer.data()), buffer.size());}
 
         virtual void stop_pwm(pal::timer::channel channel) = 0;
 

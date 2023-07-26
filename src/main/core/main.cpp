@@ -22,7 +22,7 @@ namespace mcu
 }
 
 int main()
-{
+    {
     pal::layer_init();
 
     system::init();
