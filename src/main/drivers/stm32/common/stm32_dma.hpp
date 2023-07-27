@@ -19,10 +19,12 @@ public:
     
     virtual void configure_dma(pal::timer_device* timer, uint32_t tim_channel) override;
 
+protected:
+    virtual void enable_irq_impl() override;
+
+
 private:
-
-    constexpr void init_handle();
-
+    void init_handle();
     void deinit();
 
 private:

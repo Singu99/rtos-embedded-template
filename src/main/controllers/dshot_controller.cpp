@@ -3,6 +3,8 @@
 #include "drivers/pal/dma.hpp"
 #include "drivers/pal/timer.hpp"
 
+#include "mcu.hpp"
+
 #include <etl/span.h>
 
 #pragma GCC diagnostic push
@@ -22,50 +24,37 @@
 */
 
 #define MOTOR_1_BIT 687/2
-#define MOTOR_0_BIT 343/2
+#define MOTOR_0_BIT 308/2
 
-// Define the memory buffer size and values for duty cycle
-#define BUFFER_SIZE 18
-uint32_t duty_cycle_buffer[BUFFER_SIZE] = {
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    MOTOR_0_BIT,
-    0,
-    0
-};
 
 dshot_controller::dshot_controller()
     : Runnable(__func__, Runnable::initThreadAttr(__func__, 4096, osPriorityNormal)),
     m_dshot(dshot::DSHOT_600)
 {
+
+
+
 }
+
 
 void dshot_controller::Run()
 {   
-    // uint32_t counter = 0;
+
+
     while (true)
     {
-        // Wait some time
-        // Write to motors a value
-        // if (counter > 1900) counter = 0;
-        osDelay(1000);
-        // counter += 100; 
-        // m_dshot.write(counter);
-    }
-    
+        osDelay(1);            // simulating a 0.1 KHz update rate
+
+        if (mcu::rx->getChannel(0) > 1300)
+        {
+            // Scaling from 1300 - 2000 to 48 - 648
+            uint32_t value = ((mcu::rx->getChannel(0) - 1300) * 600 / 700 ) + 48;
+            m_dshot.write(value);
+        }
+        else{
+            m_dshot.write(0);   // Disarmed command
+        }
+    }    
 }
 
 void dshot_controller::Init()

@@ -22,19 +22,23 @@ public:
     void write(uint16_t value);
 
 private:
+    
+    void irq_handler(size_t channel);
+
     uint32_t prepare_packet(uint16_t value);
     void prepare_dma_buffer(uint16_t value);
 
 private:
 
     // Timer
-    pal::timer_device* m_timer;                                 // Timer device for the PWM generation
-    pal::timer::channel m_channel;                              // Timer channel for the PWM generation
-    dshot_speed m_speed;                                        // Dshot speed
+    pal::timer_device* m_timer;                                             // Timer device for the PWM generation
+    pal::timer::channel m_channel;                                          // Timer channel for the PWM generation
+    dshot_speed m_speed;                                                    // Dshot speed
 
     // DMA
-    static constexpr uint32_t MOTOR_BUFFER_SIZE = 18; 
-    etl::array<uint32_t,MOTOR_BUFFER_SIZE> m_motor_dma_buffer;             // DMA buffer for the motor PWM duty cycles
-    pal::dma_device* m_dma;                                     // DMA device for the PWM generation
+    static constexpr uint32_t MOTOR_BUFFER_SIZE = 17;                       // DMA buffer size for the motor PWM duty cycles 
+    etl::array<uint32_t,MOTOR_BUFFER_SIZE> m_motor_dma_buffer;              // DMA buffer for the motor PWM duty cycles
+    etl::span<uint32_t> m_buffer;                            // DMA buffer span for the motor PWM duty cycles
+    pal::dma_device* m_dma;                                                 // DMA device for the PWM generation
 };
 

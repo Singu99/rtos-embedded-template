@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 #include "stm32_timer.hpp"
 #include "stm32_timer_impl.hpp"
 
@@ -8,6 +11,8 @@
 #include "config.hpp"
 
 #include "error_handler.hpp"
+
+
 
 static constexpr uint32_t CHANNEL_COUNT = static_cast<size_t>(pal::timer::channel::COUNT);
 static constexpr inline etl::array<uint32_t, CHANNEL_COUNT> get_channel_map()
@@ -108,6 +113,8 @@ void timer_device_stm32::configure_pwm(uint32_t prescaler, uint32_t period, pal:
 
 void timer_device_stm32::start_pwm(pal::timer::channel channel, uint32_t* buffer, uint32_t lenght)
 {
+
+
     const auto channel_map = get_channel_map();
     if (HAL_TIM_PWM_Start_DMA(&m_handle, channel_map[static_cast<size_t>(channel)], buffer, lenght) != HAL_OK)
     {
@@ -124,6 +131,17 @@ void timer_device_stm32::stop_pwm(pal::timer::channel channel)
     }
 }
 
+void timer_device_stm32::pause_pwm()
+{
+    __HAL_TIM_DISABLE(&m_handle);
+    
+}
+
+void timer_device_stm32::resume_pwm()
+{
+    __HAL_TIM_ENABLE(&m_handle);
+}
+
 void timer_device_stm32::init_handle()
 {
     const auto* tim_hw = hardware<pal::stm32::timer_hardware_t>::get(m_dev_id);
@@ -132,3 +150,5 @@ void timer_device_stm32::init_handle()
     // Init timer clock
     RCC_ClockCmd(tim_hw->rcc, ENABLE);
 }
+
+#pragma GCC diagnostic pop

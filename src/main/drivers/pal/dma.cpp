@@ -1,10 +1,13 @@
 #include "dma.hpp"
 
 #include <etl/vector.h>
+#include <etl/delegate_service.h>
 
 #include "target/target.h"
 
 #include "drivers/stm32/common/stm32_dma.hpp"
+
+#include "drivers/pal/isr.hpp"
 
 static constexpr uint32_t dma_count = static_cast<uint32_t>(pal::dma::id::COUNT);
 
@@ -22,40 +25,76 @@ static constexpr uint32_t dma_count = static_cast<uint32_t>(pal::dma::id::COUNT)
 static etl::vector<pal::dma::id, dma_count> used_dma_idx = {};                      // Used hardware dma indexes
 static etl::vector<dma_device_hw, dma_count> dma_devices;                           // Dma devices
 
-pal::dma_device::dma_device()
-    : active(true)
-{
-    // Check if dma is already used
-    while (etl::find(used_dma_idx.begin(), used_dma_idx.end(), m_dma_id) != used_dma_idx.end())
+namespace pal {
+
+    // irq vector ids
+    static const etl::array<isr::vector_id, 16> vector_ids = {
+        isr::vector_id::DMA1_Stream0_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream1_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream2_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream3_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream4_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream5_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream6_IRQ_HANDLER,
+        isr::vector_id::DMA1_Stream7_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream0_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream1_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream2_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream3_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream4_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream5_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream6_IRQ_HANDLER,
+        isr::vector_id::DMA2_Stream7_IRQ_HANDLER
+    };
+
+
+    dma_device::dma_device()
+        : active(true)
     {
-        m_dma_id = static_cast<pal::dma::id>(static_cast<uint32_t>(m_dma_id) + 1);
-        if (m_dma_id == pal::dma::id::COUNT)
+        // Check if dma is already used
+        while (etl::find(used_dma_idx.begin(), used_dma_idx.end(), m_dma_id) != used_dma_idx.end())
         {
-            active = false;
-            return;   
+            m_dma_id = static_cast<dma::id>(static_cast<uint32_t>(m_dma_id) + 1);
+            if (m_dma_id == dma::id::COUNT)
+            {
+                active = false;
+                return;   
+            }
+        }
+        // Mark dma stream as used 
+        used_dma_idx.push_back(m_dma_id);
+    }
+
+    dma_device::~dma_device()
+    {
+        deinit();   
+    }
+
+    void dma_device::enable_irq(etl::delegate<void(size_t)> callback)
+    {
+        // Register uart interrupt
+        uint32_t device_id = static_cast<uint32_t>(m_dma_id);
+
+        // The callback could be improved using a method to generate the apropriate callback
+        isr::get_interrupt_vectors_instance().register_delegate(vector_ids[device_id], callback);
+
+        // Enable hardawre dependent interrupt
+        enable_irq_impl();
+    }
+
+    void dma_device::deinit()
+    {
+        if (active)
+        {
+            auto it = etl::find(used_dma_idx.begin(), used_dma_idx.end(), m_dma_id);
+            if (it != used_dma_idx.end())
+            {
+                used_dma_idx.erase(used_dma_idx.begin() + static_cast<uint32_t>(m_dma_id));
+            }
         }
     }
-    // Mark dma stream as used 
-    used_dma_idx.push_back(m_dma_id);
-}
 
-pal::dma_device::~dma_device()
-{
-    deinit();   
 }
-
-void pal::dma_device::deinit()
-{
-    if (active)
-    {
-        auto it = etl::find(used_dma_idx.begin(), used_dma_idx.end(), m_dma_id);
-        if (it != used_dma_idx.end())
-        {
-            used_dma_idx.erase(used_dma_idx.begin() + static_cast<uint32_t>(m_dma_id));
-        }
-    }
-}
-
 
 // ***********************************************************************************
 // Template speciallizations for getting devices specific instances. Used by device.hpp.

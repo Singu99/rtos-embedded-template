@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include <etl/delegate_service.h>
+
 #include "drivers/common/device.hpp"
 #include "drivers/pal/timer.hpp"
 
@@ -25,12 +27,16 @@ namespace pal {
 
         virtual void configure_dma(pal::timer_device* timer, uint32_t tim_channel) = 0;
 
+        void enable_irq(etl::delegate<void(size_t)> callback);
+
         void deinit();
+
+    protected: 
+        virtual void enable_irq_impl() = 0;
 
     protected:
         dma::id m_dma_id;
         bool active;
-
     };
 
 }

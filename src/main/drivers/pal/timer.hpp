@@ -28,6 +28,9 @@ namespace pal {
 
         virtual void stop_pwm(pal::timer::channel channel) = 0;
 
+        virtual void pause_pwm() = 0;
+        virtual void resume_pwm() = 0;
+
         timer::id get_id() const { return m_dev_id; }
 
         timer_device(timer::id dev_id);

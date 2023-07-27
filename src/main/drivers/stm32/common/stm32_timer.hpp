@@ -21,6 +21,9 @@ public:
     virtual void configure_pwm(uint32_t prescaler, uint32_t period, pal::timer::channel channel) override;
     virtual void stop_pwm(pal::timer::channel channel) override;
 
+    virtual void pause_pwm() override;
+    virtual void resume_pwm() override;
+
     inline TIM_HandleTypeDef* get_handle() { return &m_handle; }
 
 protected:
